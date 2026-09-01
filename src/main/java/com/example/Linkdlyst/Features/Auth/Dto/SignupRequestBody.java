@@ -1,23 +1,21 @@
 package com.example.Linkdlyst.Features.Auth.Dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class SignupRequestBody {
 
     @NotNull(message = "Name is required")
     @NotEmpty(message = "Name is required")
-    @Max(value = 50, message = "Name should not be greater than 50 characters")
-    @Min(value = 2, message = "Name should not be less than 2 characters")
+    @Size(min = 2, max = 50, message = "Name should be between 2 and 50 characters")
     private String name;
 
     @NotNull(message = "Email is required")
     @NotEmpty(message = "Email is required")
-    @Max(value = 50, message = "Email should not be greater than 50 characters")
-    @Min(value = 5, message = "Email should not be less than 5 characters")
+    @Size(max = 50, message = "Email should not be greater than 50 characters")
+    @Size(min = 5, message = "Email should not be less than 5 characters")
     @Email(message = "Email should be valid")
     private String email;
 
