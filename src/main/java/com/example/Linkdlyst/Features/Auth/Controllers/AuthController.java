@@ -7,10 +7,18 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.Linkdlyst.Features.Auth.Dto.SignupRequestBody;
+import com.example.Linkdlyst.Features.Auth.Services.SignupService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
+
+    private final SignupService signupService;
+
+    public AuthController(SignupService _signupService) {
+        signupService = _signupService;
+    }
+
     @PostMapping("/login")
     public String login(
        @Valid @RequestBody LoginRequestBody loginRequestBody) {
@@ -21,6 +29,6 @@ public class AuthController {
     public String signup(
         @Valid @RequestBody SignupRequestBody signupRequestBody
     ) {
-        return "Signup Controller";
+        return signupService.signup(signupRequestBody);
     }
 }
