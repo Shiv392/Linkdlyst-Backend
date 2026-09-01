@@ -25,6 +25,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+    //this means, when ever we ask for PasswordEncoder, always returns 
+    //this BcryptPasswordEncoder with strenght 10.
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);

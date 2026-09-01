@@ -7,15 +7,20 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.EntityListeners;
 
 @Entity
-@Table(name = "users",
-    indexes = {
+@Table(name = "users", indexes = {
         @Index(name = "idx_users_email", columnList = "email", unique = true)
-    }
-)
+})
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)
@@ -26,6 +31,14 @@ public class UserEntity {
 
     // @Column(nullable = true)
     private String password;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     public UserEntity() {
     }
@@ -39,13 +52,24 @@ public class UserEntity {
     public Long getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public String getEmail() {
         return email;
     }
+
     public String getPassword() {
         return password;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
