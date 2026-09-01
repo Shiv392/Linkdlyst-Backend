@@ -3,12 +3,15 @@ package com.example.Linkdlyst.Features.Auth.Controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.Linkdlyst.Features.Auth.Dto.LoginRequestBody;
+import com.example.Linkdlyst.Features.Auth.Dto.LoginResponseBody;
+
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.Linkdlyst.Features.Auth.Dto.SignupRequestBody;
+import com.example.Linkdlyst.Features.Auth.Services.LoginService;
 import com.example.Linkdlyst.Features.Auth.Services.SignupService;
 import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
 
@@ -17,15 +20,18 @@ import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
 public class AuthController {
 
     private final SignupService signupService;
+    private final LoginService loginService;
 
-    public AuthController(SignupService _signupService) {
+    public AuthController(SignupService _signupService, LoginService _loginService) {
         signupService = _signupService;
+        loginService = _loginService;
     }
 
     @PostMapping("/login")
-    public String login(
+    public ResponseEntity<GlobalApiResponse> login(
        @Valid @RequestBody LoginRequestBody loginRequestBody) {
-        return "Login Controller";
+        LoginResponseBody loginResponse = loginService.login(loginRequestBody);
+        return ResponseEntity.ok(new GlobalApiResponse<>(true, "User logged in successfully", loginResponse));
     }
 
     @PostMapping("/signup")
