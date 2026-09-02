@@ -14,32 +14,34 @@ import com.example.Linkdlyst.Utils.Exceptions.UnAuthenticatedException;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     
     public LoginService(
         UserRepository _userRepository, 
-        PasswordEncoder _passwordEncoder
-        
+        PasswordEncoder _passwordEncoder,
+        JwtService _jwtService
 
     ) {
         userRepository = _userRepository;
         passwordEncoder = _passwordEncoder;
+        jwtService = _jwtService;
     }
 
     public LoginResponseBody login(LoginRequestBody loginRequestBody){
         String email = loginRequestBody.getEmail().trim().toLowerCase();
         String password = loginRequestBody.getPassword();
 
-        Optional<UserEntity>user = userRepository.findByEmail(email);
-        if(user.isEmpty()){
+        Optional<UserEntity>userOptional = userRepository.findByEmail(email);
+        if(userOptional.isEmpty()){
             throw new UnAuthenticatedException("Invalid email or password");
         }
 
-        String hashedPassword = user.get().getPassword();
+        UserEntity user = userOptional.get();
+        String hashedPassword = user.getPassword();
         boolean isPasswordMatched = passwordEncoder.matches(password, hashedPassword);
         if (isPasswordMatched) {
-            // Generate JWT tokens here
-            String accessToken = "your_access_token";
-            String refreshToken = "your_refresh_token";
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
             return new LoginResponseBody(accessToken, refreshToken);
         }
 
