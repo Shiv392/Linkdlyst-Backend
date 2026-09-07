@@ -18,7 +18,7 @@ public class SecurityConfig {
         .cors(cors-> cors.disable())
         .authorizeHttpRequests(auth-> auth.
             requestMatchers(
-                "/api/v1/auth/**"
+                "/v1/auth/**"
             ).permitAll()
             .anyRequest().authenticated()
         );
