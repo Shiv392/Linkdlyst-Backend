@@ -34,7 +34,7 @@ public class JwtService {
         return Jwts.builder()
         .subject(user.getEmail())
         .claim("userId", user.getId())
-        .claim("type", "accesss")
+        .claim("type", "access")
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis()+accessTokenExpiration))
         .signWith(secretKey)
@@ -50,6 +50,47 @@ public class JwtService {
         .expiration(new Date(System.currentTimeMillis()+refreshTokenExpiration))
         .signWith(secretKey)
         .compact();
+    }
+
+    public boolean isTokenValid(String token){
+        try{
+            Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token);
+
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public String getEmail(String token){
+        return Jwts.parser()
+        .verifyWith(secretKey)
+        .build()
+        .parseSignedClaims(token)
+        .getPayload()
+        .getSubject();
+    }
+
+    public Long getUserId(String token){
+        return Jwts.parser()
+        .verifyWith(secretKey)
+        .build()
+        .parseSignedClaims(token)
+        .getPayload()
+        .get("userId", Long.class);
+    }
+
+    public String getTokenType(String token){
+        return Jwts.parser()
+        .verifyWith(secretKey)
+        .build()
+        .parseSignedClaims(token)
+        .getPayload()
+        .get("type", String.class);
     }
 
 }
