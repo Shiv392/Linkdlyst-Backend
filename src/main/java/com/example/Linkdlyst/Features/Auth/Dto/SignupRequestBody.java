@@ -21,6 +21,7 @@ public class SignupRequestBody {
 
     @NotEmpty(message = "Password is required")
     @NotNull(message = "Password is required")
+    @Size(min = 8, max = 50, message = "Password should be between 8 and 50 characters")
     private String password;
 
     public SignupRequestBody(){}

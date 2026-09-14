@@ -34,6 +34,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         return;
       }
 
+      //token after Bearer_ i.e 7th index 
       String token = authHeader.substring(7);
       if(!jwtService.isTokenValid(token)){
         filterChain.doFilter(request, response);

@@ -28,8 +28,8 @@ public class SignupService {
     
     public boolean signup(SignupRequestBody signupRequestBody) {
         String email = signupRequestBody.getEmail().trim().toLowerCase();
-        String password = signupRequestBody.getPassword();
         String name = signupRequestBody.getName().trim();
+        String password = signupRequestBody.getPassword().trim();
 
         boolean isUserExists = userRepository.existsByEmail(email);
         if(isUserExists) {
