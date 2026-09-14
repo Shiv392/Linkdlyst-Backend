@@ -1,8 +1,13 @@
 package com.example.Linkdlyst.Features.Urls.Entities;
 
+import java.time.LocalDateTime;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +23,7 @@ import jakarta.persistence.Table;
         @Index(name="short_code_idx", columnList = "shortCode", unique = true)
     }
 )
+@EntityListeners(AuditingEntityListener.class)
 public class UrlEntiry {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +37,14 @@ public class UrlEntiry {
 
     @Column(nullable = true)
     private String securityPassword;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "userId", nullable = false)

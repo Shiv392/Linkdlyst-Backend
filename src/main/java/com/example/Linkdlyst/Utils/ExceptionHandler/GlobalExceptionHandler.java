@@ -3,11 +3,12 @@ package com.example.Linkdlyst.Utils.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
 import com.example.Linkdlyst.Utils.Exceptions.BadRequestException;
 import com.example.Linkdlyst.Utils.Exceptions.NotFoundException;
 import com.example.Linkdlyst.Utils.Exceptions.UnAuthenticatedException;
+
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
