@@ -6,6 +6,7 @@ import com.example.Linkdlyst.Features.Urls.Dtos.PostUrlDtos;
 import com.example.Linkdlyst.Features.Urls.Entities.UrlEntiry;
 import com.example.Linkdlyst.Features.Urls.Services.URLService;
 import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.example.Linkdlyst.Features.Urls.Dtos.EditUrlDtos;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +50,8 @@ public class URLController {
     }
 
     @PostMapping("")
-    public ResponseEntity<GlobalApiResponse> addUrl(@RequestBody PostUrlDtos requestBody) {
+    public ResponseEntity<GlobalApiResponse> addUrl(
+        @Valid @RequestBody PostUrlDtos requestBody) {
         boolean isAdded = urlService.addURL(requestBody);
         if(isAdded){
             return ResponseEntity.status(200)
@@ -90,4 +93,22 @@ public class URLController {
         }
     }
     
+    @PatchMapping ("/{id}")
+    public ResponseEntity<GlobalApiResponse> editUrl(@PathVariable Long id, 
+        
+        @Valid @RequestBody EditUrlDtos requestBody){
+
+        boolean isEdited = urlService.editURL(requestBody, id);
+        if(isEdited){
+            return ResponseEntity.status(200)
+            .body(
+                new GlobalApiResponse(true, "URL edited successfully", null)
+            );
+        }
+
+        return ResponseEntity.status(500)
+            .body(
+                new GlobalApiResponse(false, "Failed to edit URL", null)
+        );
+    }
 }
