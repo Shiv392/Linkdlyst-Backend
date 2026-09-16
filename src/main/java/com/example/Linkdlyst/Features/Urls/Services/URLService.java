@@ -11,6 +11,7 @@ import com.example.Linkdlyst.Features.Urls.Entities.UrlEntiry;
 import com.example.Linkdlyst.Features.Urls.Repository.URLRepository;
 import com.example.Linkdlyst.Utils.Exceptions.BadRequestException;
 import com.example.Linkdlyst.Utils.Services.GetAuthUserService;
+import com.example.Linkdlyst.Features.Urls.Dtos.EditUrlDtos;
 
 @Service
 public class URLService {
@@ -83,5 +84,27 @@ public class URLService {
         else{
             throw new BadRequestException("URL not found or you don't have access to this URL");
         }
+    }
+
+    public boolean editURL(EditUrlDtos requestBody, Long id){
+        AuthUser authUser = getAuthUserService.getAuthUser();
+        int userId = authUser.userId().intValue();
+
+        long urlId = id;
+        String newUrl = requestBody.getUrl().toLowerCase().trim();
+        String securityPassword = requestBody.getSecurityPassword();
+
+        Optional<UrlEntiry>isUrlExits = urlRepository.findByIdAndUser_Id(urlId, (long)userId);
+        if(isUrlExits.isEmpty()){
+            throw new BadRequestException("URL not found or you don't have access to this URL");
+        }
+
+        UrlEntiry urlEntityRow = isUrlExits.get();
+
+        urlEntityRow.setUrl(newUrl);
+        urlEntityRow.setSecurityPassword(securityPassword);
+        urlRepository.save(urlEntityRow);
+
+        return true;
     }
 }

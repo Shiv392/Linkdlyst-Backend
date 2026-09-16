@@ -59,13 +59,21 @@ public class UrlEntiry {
         user = _userEntity;
     }
 
+    public Long getId(){
+        return id;
+    }
+
     public String getUrl(){
         return url;
     }
     public String getShortCode(){
         return shortCode;
     }
-    public String getSecurityPassword(){
-        return securityPassword;
+
+    public void setUrl(String _url){
+        url = _url;
+    }
+    public void setSecurityPassword(String _securityPassword){
+        securityPassword = _securityPassword;
     }
 }
