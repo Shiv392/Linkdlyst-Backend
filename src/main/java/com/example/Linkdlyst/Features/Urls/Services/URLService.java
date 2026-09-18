@@ -2,6 +2,8 @@ package com.example.Linkdlyst.Features.Urls.Services;
 
 import java.util.Optional;
 import java.util.List;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import com.example.Linkdlyst.Features.Auth.Dto.AuthUser;
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
@@ -19,13 +21,15 @@ public class URLService {
     private final CodeService codeService;
     private final GetAuthUserService getAuthUserService;
     private final UserRepository userRepository;
+    private final StringRedisTemplate stringRedisTemplate;
 
     public URLService(URLRepository _urlRepository, CodeService _codeService, GetAuthUserService _getAuthUserService,
-            UserRepository _userRepository) {
+            UserRepository _userRepository, StringRedisTemplate _stringRedisTemplate) {
         urlRepository = _urlRepository;
         codeService = _codeService;
         getAuthUserService = _getAuthUserService;
         userRepository = _userRepository;
+        stringRedisTemplate = _stringRedisTemplate;
     }
 
     public List<UrlEntiry> getUrls() {
@@ -62,6 +66,12 @@ public class URLService {
     public Optional<UrlEntiry> getUrlByShortCode(String shortCode){
         AuthUser authUser = getAuthUserService.getAuthUser();
         int userId = authUser.userId().intValue();
+
+        // String cacheKey = authUser.email()+":"+shortCode;
+        // String cacheURL = stringRedisTemplate.opsForValue().get(cacheKey);
+        // if(cacheURL!=null){
+        //     return cacheURL;
+        // }
 
         Optional<UrlEntiry>url = urlRepository.findByUser_IdAndShortCode((long)userId, shortCode);
         if(url.isEmpty()){

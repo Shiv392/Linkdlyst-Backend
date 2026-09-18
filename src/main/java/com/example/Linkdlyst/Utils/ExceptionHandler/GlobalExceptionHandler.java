@@ -1,5 +1,6 @@
 package com.example.Linkdlyst.Utils.ExceptionHandler;
 
+import java.util.TooManyListenersException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -7,6 +8,7 @@ import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
 import com.example.Linkdlyst.Utils.Exceptions.BadRequestException;
 import com.example.Linkdlyst.Utils.Exceptions.NotFoundException;
 import com.example.Linkdlyst.Utils.Exceptions.UnAuthenticatedException;
+import com.example.Linkdlyst.Utils.Exceptions.TooManyRequestException;
 
 
 @RestControllerAdvice
@@ -35,6 +37,14 @@ public class GlobalExceptionHandler {
             new GlobalApiResponse<>(false, ex.getMessage(), null)
         );
     }   
+
+    @ExceptionHandler(TooManyRequestException.class)
+    public ResponseEntity<GlobalApiResponse> handleTooManyRequestException(TooManyListenersException ex){
+        return ResponseEntity.status(429)
+        .body(
+            new GlobalApiResponse(false, "Invalid requests",null)
+        );
+    }
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GlobalApiResponse> handleException(Exception ex){
