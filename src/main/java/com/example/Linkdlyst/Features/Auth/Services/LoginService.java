@@ -9,6 +9,7 @@ import com.example.Linkdlyst.Features.Auth.Dto.LoginResponseBody;
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
 import com.example.Linkdlyst.Features.Auth.Repository.UserRepository;
 import com.example.Linkdlyst.Utils.Exceptions.UnAuthenticatedException;
+import com.example.Linkdlyst.Features.Auth.Dto.JwtTokenUser;
 
 @Service
 public class LoginService {
@@ -40,8 +41,8 @@ public class LoginService {
         String hashedPassword = user.getPassword();
         boolean isPasswordMatched = passwordEncoder.matches(password, hashedPassword);
         if (isPasswordMatched) {
-            String accessToken = jwtService.generateAccessToken(user);
-            String refreshToken = jwtService.generateRefreshToken(user);
+            String accessToken = jwtService.generateAccessToken(new JwtTokenUser(user.getId(), user.getEmail(), "access"));
+            String refreshToken = jwtService.generateRefreshToken(new JwtTokenUser(user.getId(), user.getEmail(), "refresh"));
             return new LoginResponseBody(accessToken, refreshToken);
         }
 

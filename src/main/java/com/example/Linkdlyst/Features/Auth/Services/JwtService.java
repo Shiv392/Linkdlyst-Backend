@@ -2,16 +2,12 @@ package com.example.Linkdlyst.Features.Auth.Services;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-
 import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import com.example.Linkdlyst.Features.Auth.Dto.JwtTokenUser;
 
 @Service
 public class JwtService {
@@ -30,10 +26,10 @@ public class JwtService {
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
 
-    public String generateAccessToken(UserEntity user){
+    public String generateAccessToken(JwtTokenUser user){
         return Jwts.builder()
         .subject(user.getEmail())
-        .claim("userId", user.getId())
+        .claim("userId", user.getUserId())
         .claim("type", "access")
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis()+accessTokenExpiration))
@@ -41,10 +37,10 @@ public class JwtService {
         .compact();
     }
 
-    public String generateRefreshToken(UserEntity user){
+    public String generateRefreshToken(JwtTokenUser user){
         return Jwts.builder()
         .subject(user.getEmail())
-        .claim("userId", user.getId())
+        .claim("userId", user.getUserId())
         .claim("type", "refresh")
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis()+refreshTokenExpiration))
