@@ -28,14 +28,16 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain )   throws ServletException, IOException{
       String authHeader = request.getHeader("Authorization");
+      String RefreshToken = request.getHeader("Refresh_Token");
 
-      if(authHeader == null || !authHeader.startsWith("Bearer ")){
+      if(authHeader == null || !authHeader.startsWith("Bearer ") || RefreshToken == null || !RefreshToken.startsWith("Bearer ")){
         filterChain.doFilter(request, response);
         return;
       }
 
       //token after Bearer_ i.e 7th index 
       String token = authHeader.substring(7);
+
       if(!jwtService.isTokenValid(token)){
         filterChain.doFilter(request, response);
         return;
