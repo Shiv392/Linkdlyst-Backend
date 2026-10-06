@@ -1,15 +1,22 @@
 package com.example.Linkdlyst.Features.Auth.Controllers;
 
+import java.time.Duration;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.Linkdlyst.Features.Auth.Dto.LoginRequestBody;
 import com.example.Linkdlyst.Features.Auth.Dto.LoginResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import com.example.Linkdlyst.Features.Auth.Dto.SignupRequestBody;
 import com.example.Linkdlyst.Features.Auth.Services.JwtService;
 import com.example.Linkdlyst.Features.Auth.Services.LoginService;
@@ -43,8 +50,27 @@ public class AuthController {
     public ResponseEntity<GlobalApiResponse> login(
        @Valid @RequestBody LoginRequestBody loginRequestBody) {
         LoginResponseBody loginResponse = loginService.login(loginRequestBody);
+
+        ResponseCookie accessTokenCookie = ResponseCookie.from("user_access_token", loginResponse.getAccessToken())
+        .httpOnly(true)
+        .secure(false) //set to true in production
+        .path("/")
+        .sameSite("Lax")
+        .maxAge(Duration.ofMinutes(15))
+        .build();
+
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh_token", loginResponse.getRefreshToken())
+        .httpOnly(true)
+        .secure(false)
+        .path("/")
+        .sameSite("Lax")
+        .maxAge(Duration.ofDays(30))
+        .build();
         
-        return ResponseEntity.ok(new GlobalApiResponse<>(true, "User logged in successfully", loginResponse));
+        return ResponseEntity.status(200)
+        .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+        .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+        .body(new GlobalApiResponse<>(true, "User logged in successfully", null));
     }
 
     @PostMapping("/signup")
