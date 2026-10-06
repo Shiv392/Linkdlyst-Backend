@@ -35,13 +35,14 @@ public class URLService {
     public List<UrlEntiry> getUrls() {
         AuthUser authUser = getAuthUserService.getAuthUser();
         int userId = authUser.userId().intValue();
-        return urlRepository.findByUser_Id((long) userId);
+        return urlRepository.findByUser_IdOrderByUpdatedAtDesc((long) userId);
     }
 
     public boolean addURL(PostUrlDtos requestBody) {
         String url = requestBody.getUrl().toLowerCase().trim();
         AuthUser authUser = getAuthUserService.getAuthUser();
         int userId = authUser.userId().intValue();
+        String name = requestBody.getName().trim();
 
         Optional<UrlEntiry> urlExits = urlRepository.findByUser_IdAndUrl((long) userId, url);
 
@@ -59,7 +60,7 @@ public class URLService {
             throw new BadRequestException("User not found");
         }
 
-        urlRepository.save(new UrlEntiry(url, shortCode, null, userEntity.get()));
+        urlRepository.save(new UrlEntiry(name, url, shortCode, null, userEntity.get()));
         return true;
     }
 

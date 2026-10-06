@@ -12,7 +12,7 @@ public interface URLRepository extends JpaRepository<UrlEntiry, Long> {
     Optional<UrlEntiry> findByUser_IdAndUrl(Long userId, String url);
 
     //_ is saying that User_id is a property of the UserEntity class which is a property of the UrlEntiry class
-    List<UrlEntiry> findByUser_Id(Long userId);
+    List<UrlEntiry> findByUser_IdOrderByUpdatedAtDesc(Long userId);
 
     Optional<UrlEntiry> findByUser_IdAndShortCode(Long userId, String shortCode);
 
