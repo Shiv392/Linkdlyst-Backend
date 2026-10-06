@@ -1,11 +1,17 @@
 package com.example.Linkdlyst.Features.Urls.Dtos;
 
 import org.hibernate.validator.constraints.URL;
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class PostUrlDtos {
+
+    @NotNull(message="Name can't be empty")
+    @NotEmpty(message = "Name can't be empty")
+    @Size(min = 2,  message = "Enter valid name" )
+    @Size (max = 50 , message =  "Name can't be more then 50 character")
+    private String name;
 
     @NotNull(message = "URL is required")
     @URL(message = "URL must be valid")
@@ -26,5 +32,8 @@ public class PostUrlDtos {
     }
     public String getSecurityPassword(){
         return securityPassword;
+    }
+    public String getName(){
+        return name;
     }
 }

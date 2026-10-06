@@ -29,6 +29,9 @@ public class UrlEntiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 50)
+    private String name;
+
     @Column(nullable =  false)
     private String url;
 
@@ -52,7 +55,8 @@ public class UrlEntiry {
 
     public UrlEntiry(){}
 
-    public UrlEntiry(String _url, String _shortCode, String _securityPassword, UserEntity _userEntity){
+    public UrlEntiry(String _name, String _url, String _shortCode, String _securityPassword, UserEntity _userEntity){
+        name = _name;
         url = _url;
         shortCode = _shortCode;
         securityPassword = _securityPassword;
@@ -75,5 +79,9 @@ public class UrlEntiry {
     }
     public void setSecurityPassword(String _securityPassword){
         securityPassword = _securityPassword;
+    }
+
+    public String getName(){
+        return name;
     }
 }
