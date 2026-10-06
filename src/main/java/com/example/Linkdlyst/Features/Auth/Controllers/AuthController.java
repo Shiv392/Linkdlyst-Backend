@@ -79,7 +79,7 @@ public class AuthController {
     ) {
         boolean isSignedUp = signupService.signup(signupRequestBody);
         if (isSignedUp) {
-            return ResponseEntity.ok(new GlobalApiResponse<>(true, "Otp has been sent to your email", null));
+            return ResponseEntity.ok(new GlobalApiResponse<>(true, "New user created, please login with same credentials", null));
         } else {
             return ResponseEntity.status(500).body(new GlobalApiResponse<>(false, "Failed to sign up user", null));
         }
