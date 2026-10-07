@@ -15,7 +15,7 @@ public class ValidateRefreshToken {
     }
     
     public String createToken(String refreshToken){
-        if(refreshToken == null || !refreshToken.startsWith("Bearer ")){
+        if(refreshToken == null){
             throw new UnAuthenticatedException("Please login again");
         }
 

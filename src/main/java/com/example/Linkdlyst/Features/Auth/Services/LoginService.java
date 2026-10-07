@@ -4,12 +4,13 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.Linkdlyst.Features.Auth.Dto.JwtTokenUser;
 import com.example.Linkdlyst.Features.Auth.Dto.LoginRequestBody;
 import com.example.Linkdlyst.Features.Auth.Dto.LoginResponseBody;
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
 import com.example.Linkdlyst.Features.Auth.Repository.UserRepository;
 import com.example.Linkdlyst.Utils.Exceptions.UnAuthenticatedException;
-import com.example.Linkdlyst.Features.Auth.Dto.JwtTokenUser;
 
 @Service
 public class LoginService {
