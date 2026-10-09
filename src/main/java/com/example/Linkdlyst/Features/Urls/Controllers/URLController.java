@@ -1,12 +1,8 @@
 package com.example.Linkdlyst.Features.Urls.Controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.example.Linkdlyst.Features.Urls.Dtos.PostUrlDtos;
-import com.example.Linkdlyst.Features.Urls.Entities.UrlEntiry;
-import com.example.Linkdlyst.Features.Urls.Services.URLService;
-import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
-import jakarta.validation.Valid;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +10,18 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.Linkdlyst.Features.Urls.Dtos.EditUrlDtos;
-import java.util.List;
-import java.util.Optional;
+import com.example.Linkdlyst.Features.Urls.Dtos.PostUrlDtos;
+import com.example.Linkdlyst.Features.Urls.Dtos.URLListResponse;
+import com.example.Linkdlyst.Features.Urls.Entities.UrlEntiry;
+import com.example.Linkdlyst.Features.Urls.Services.URLService;
+import com.example.Linkdlyst.Utils.ApiResponse.GlobalApiResponse;
+
+import jakarta.validation.Valid;
 
 @RestController 
 @RequestMapping("/v1/urls")
@@ -29,11 +34,17 @@ public class URLController {
     }
     
     @GetMapping("")
-    public ResponseEntity<GlobalApiResponse> getUrls() {
-        List<UrlEntiry>urls = urlService.getUrls();
+    public ResponseEntity<GlobalApiResponse> getUrls(
+        @RequestParam(defaultValue="10") int limit, 
+        @RequestParam(defaultValue="0") int offset, 
+        @RequestParam(defaultValue="") String search) {
+        Page<UrlEntiry>urls = urlService.getUrls(limit, offset, search);
+
+        URLListResponse response = new URLListResponse(urls.getContent(), urls.getTotalElements());
+
         return ResponseEntity.status(200)
         .body(
-            new GlobalApiResponse(true, "Fetched", urls)
+            new GlobalApiResponse(true, "Fetched", response)
         );
     }
 

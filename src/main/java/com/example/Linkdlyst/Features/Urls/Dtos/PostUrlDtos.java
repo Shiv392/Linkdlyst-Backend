@@ -1,6 +1,7 @@
 package com.example.Linkdlyst.Features.Urls.Dtos;
 
 import org.hibernate.validator.constraints.URL;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -22,7 +23,8 @@ public class PostUrlDtos {
 
     public PostUrlDtos(){}
 
-    public PostUrlDtos(String _url, String _securityPassword){
+    public PostUrlDtos(String _name, String _url, String _securityPassword){
+        name = _name;
         url = _url;
         securityPassword = _securityPassword;
     }
