@@ -1,19 +1,22 @@
 package com.example.Linkdlyst.Features.Urls.Services;
 
 import java.util.Optional;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
 import com.example.Linkdlyst.Features.Auth.Dto.AuthUser;
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
 import com.example.Linkdlyst.Features.Auth.Repository.UserRepository;
+import com.example.Linkdlyst.Features.Urls.Dtos.EditUrlDtos;
 import com.example.Linkdlyst.Features.Urls.Dtos.PostUrlDtos;
 import com.example.Linkdlyst.Features.Urls.Entities.UrlEntiry;
 import com.example.Linkdlyst.Features.Urls.Repository.URLRepository;
+import com.example.Linkdlyst.Utils.Classess.OffsetBasedPageRequest;
 import com.example.Linkdlyst.Utils.Exceptions.BadRequestException;
 import com.example.Linkdlyst.Utils.Services.GetAuthUserService;
-import com.example.Linkdlyst.Features.Urls.Dtos.EditUrlDtos;
 
 @Service
 public class URLService {
@@ -32,10 +35,12 @@ public class URLService {
         stringRedisTemplate = _stringRedisTemplate;
     }
 
-    public List<UrlEntiry> getUrls() {
+    public Page<UrlEntiry> getUrls(int limit, int offset, String search) {
         AuthUser authUser = getAuthUserService.getAuthUser();
+        Pageable pageable = new OffsetBasedPageRequest(limit, offset);
+
         int userId = authUser.userId().intValue();
-        return urlRepository.findByUser_IdOrderByUpdatedAtDesc((long) userId);
+        return urlRepository.findByUser_IdOrderByUpdatedAtDesc((long) userId, pageable);
     }
 
     public boolean addURL(PostUrlDtos requestBody) {

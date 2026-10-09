@@ -1,10 +1,13 @@
 package com.example.Linkdlyst.Features.Urls.Entities;
 
 import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.example.Linkdlyst.Features.Auth.Entity.UserEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -83,5 +86,8 @@ public class UrlEntiry {
 
     public String getName(){
         return name;
+    }
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
     }
 }
